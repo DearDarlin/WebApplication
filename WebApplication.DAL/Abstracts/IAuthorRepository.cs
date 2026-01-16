@@ -1,0 +1,12 @@
+﻿using WebApplication.DAL.Entities;
+
+namespace WebApplication.DAL.Abstracts
+{
+    public interface IAuthorRepository
+    {
+        List<Author> GetAll();
+        void Add(Author author);
+        Author GetById(int id);
+        bool IsDuplicate(string firstName, string lastName);
+    }
+}

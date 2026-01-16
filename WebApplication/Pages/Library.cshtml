@@ -1,0 +1,142 @@
+﻿@page
+@model WebApplication.Pages.LibraryModel
+@{
+    ViewData["Title"] = "Library";
+}
+
+<div class="container py-4">
+
+    <h2 class="mb-4 text-primary">
+        <i class="bi bi-collection"></i> Library Catalog
+    </h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <strong>Search & Filters</strong>
+        </div>
+
+        <div class="card-body">
+            <form method="get" class="row g-2 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label">Title</label>
+                    <input asp-for="SearchTitle"
+                           class="form-control"
+                           placeholder="Search title..." />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Publish Year</label>
+                    <input name="SearchYear"
+                           type="number"
+                           class="form-control"
+                           placeholder="Year..."
+                           value="@Request.Query["SearchYear"]" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Sort by</label>
+                    <select asp-for="SortOrder" class="form-select">
+                        <option value="title_asc">Title (A–Z)</option>
+                        <option value="title_desc">Title (Z–A)</option>
+                        <option value="year_asc">Year (Oldest)</option>
+                        <option value="year_desc">Year (Newest)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-funnel"></i> Apply
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Authors</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Born</th>
+                        <th>Books Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var author in Model.Authors)
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @author.FirstName @author.LastName
+                                </strong>
+                            </td>
+                            <td>@author.BirthDate.ToShortDateString()</td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @author.Books.Count
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Books</h5>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model.Books.Count == 0)
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bi bi-emoji-frown"></i>
+                    No books found with selected filters.
+                </div>
+            }
+            else
+            {
+                <table class="table table-striped table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>ISBN</th>
+                            <th>Year</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var book in Model.Books)
+                        {
+                            <tr>
+                                <td><strong>@book.Title</strong></td>
+                                <td>@book.ISBN</td>
+                                <td>@book.PublishYear</td>
+                                <td>@book.Author.FirstName @book.Author.LastName</td>
+                                <td>
+                                    @(book.Price.HasValue
+                                                                ? $"${book.Price.Value:F2}"
+                                                                : "-")
+                        </td>
+                    </tr>
+                                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+    </div>
+
+</div>

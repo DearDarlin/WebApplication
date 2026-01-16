@@ -1,0 +1,174 @@
+﻿@page
+@model WebApplication.Pages.AddModel
+@{
+    ViewData["Title"] = "Add New Items";
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('isbn-input').addEventListener('input', function (e) {
+            let digits = e.target.value.replace(/\D/g, '');
+
+            if (!digits.startsWith('978') && digits.length > 0) {
+                digits = '978' + digits;
+            }
+
+            if (digits.length > 13) digits = digits.substring(0, 13);
+
+            let formatted = digits;
+            if (digits.length > 3) {
+                formatted = digits.slice(0, 3) + '-' + digits.slice(3);
+            }
+
+            e.target.value = formatted;
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<div class="container py-4">
+
+    <h2 class="mb-4 text-primary">
+        <i class="bi bi-journal-plus"></i> Add New Library Items
+    </h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            @Model.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="alert alert-info shadow-sm">
+        <strong>Note:</strong> First create an author, then you can add books for that author.
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Add Author</h5>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddAuthor">
+
+                        <div class="mb-3">
+                            <label class="form-label">First Name *</label>
+                            <input asp-for="NewAuthor.FirstName"
+                                   class="form-control"
+                                   required minlength="2"
+                                   placeholder="Enter first name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Last Name *</label>
+                            <input asp-for="NewAuthor.LastName"
+                                   class="form-control"
+                                   required minlength="2"
+                                   placeholder="Enter last name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Birth Date *</label>
+                            <input asp-for="NewAuthor.BirthDate"
+                                   type="date"
+                                   class="form-control"
+                                   required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-person-plus"></i> Save Author
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Add Book</h5>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" asp-page-handler="AddBook">
+
+                        <div class="mb-3">
+                            <label class="form-label">Title *</label>
+                            <input asp-for="NewBook.Title"
+                                   class="form-control"
+                                   required minlength="2"
+                                   placeholder="Book title" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Number of Book (ISBN) *</label>
+                            <input asp-for="NewBook.ISBN"
+                                   id="isbn-input"
+                                   class="form-control"
+                                   required
+                                   placeholder="978-1234567890"
+                                   maxlength="14"
+                                   pattern="978-\d{10}"
+                                   title="Формат: 978-XXXXXXXXXX" />
+                            <span asp-validation-for="NewBook.ISBN" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Publish Year *</label>
+                                <input asp-for="NewBook.PublishYear"
+                                       type="number"
+                                       class="form-control"
+                                       required min="1450" max="2026" />
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Price *</label>
+                                <input asp-for="NewBook.Price"
+                                       type="number"
+                                       step="1"
+                                       class="form-control"
+                                       required max="1000" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Author *</label>
+                            <select asp-for="NewBook.AuthorId"
+                                    class="form-select"
+                                    required>
+                                <option value="">- Select Author -</option>
+
+                                @if (Model.AuthorsList != null)
+                                {
+                                    @foreach (var author in Model.AuthorsList)
+                                    {
+                                        <option value="@author.Id">
+                                            @author.FirstName @author.LastName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-bookmark-plus"></i> Save Book
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
