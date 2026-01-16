@@ -3,12 +3,50 @@
 @{
     ViewData["Title"] = "Library";
 }
+<h2 class="mb-4 text-primary">
+    <i class="bi bi-collection"></i> Library Catalog
+</h2>
+
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Authors</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Born</th>
+                        <th>Books Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var author in Model.Authors)
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @author.FirstName @author.LastName
+                                </strong>
+                            </td>
+                            <td>@author.BirthDate.ToShortDateString()</td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @author.Books.Count
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 <div class="container py-4">
 
-    <h2 class="mb-4 text-primary">
-        <i class="bi bi-collection"></i> Library Catalog
-    </h2>
+    
 
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-light">
@@ -51,42 +89,6 @@
                 </div>
 
             </form>
-        </div>
-    </div>
-
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Authors</h5>
-        </div>
-
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>Born</th>
-                        <th>Books Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var author in Model.Authors)
-                    {
-                        <tr>
-                            <td>
-                                <strong>
-                                    @author.FirstName @author.LastName
-                                </strong>
-                            </td>
-                            <td>@author.BirthDate.ToShortDateString()</td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    @author.Books.Count
-                                </span>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
     </div>
 
