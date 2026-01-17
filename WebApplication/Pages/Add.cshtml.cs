@@ -7,13 +7,13 @@ namespace WebApplication.Pages
 {
     public class AddModel : PageModel
     {
-        private readonly IAuthorRepository _authorRepository;
-        private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authors;
+        private readonly IBookRepository _books;
 
-        public AddModel(IAuthorRepository authorRepository, IBookRepository bookRepository)
+        public AddModel(IAuthorRepository authors, IBookRepository books)
         {
-            _authorRepository = authorRepository;
-            _bookRepository = bookRepository;
+            _authors = authors;
+            _books = books;
         }
 
         [BindProperty]
@@ -21,34 +21,35 @@ namespace WebApplication.Pages
 
         [BindProperty]
         public Book NewBook { get; set; }
-        public List<Author> AuthorsList { get; set; }
+        public IList<Author> AuthorsList { get; private set; }
+
 
         [TempData]
         public string Message { get; set; }
 
         public void OnGet()
         {
-            AuthorsList = _authorRepository.GetAll();
+            AuthorsList = _authors.GetAll();
         }
 
         public IActionResult OnPostAddAuthor()
         {
-            bool exists = _authorRepository.IsDuplicate(NewAuthor.FirstName, NewAuthor.LastName);
+            bool exists = _authors.IsDuplicate(NewAuthor.FirstName, NewAuthor.LastName);
 
             if (exists)
             {
-                ModelState.AddModelError("Error", "Such of author already exists");
-                AuthorsList = _authorRepository.GetAll();
+                ModelState.AddModelError("Error", "There is such an author in the library! Please, no repetitions!");
+                AuthorsList = _authors.GetAll();
                 return Page();
             }
-            _authorRepository.Add(NewAuthor);
+            _authors.Add(NewAuthor);
             Message = $"Author {NewAuthor.FirstName} {NewAuthor.LastName} added successfully!";
             return RedirectToPage();
         }
 
         public IActionResult OnPostAddBook()
         {
-            _bookRepository.Add(NewBook);
+            _books.Add(NewBook);
             Message = $"Book '{NewBook.Title}' added successfully!";
             return RedirectToPage();
         }

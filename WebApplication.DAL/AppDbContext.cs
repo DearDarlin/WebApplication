@@ -14,10 +14,15 @@ namespace WebApplication.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Book>()
-                .HasIndex(b => b.ISBN)
-                .IsUnique();
+            ConfigureBooks(modelBuilder);
+        }
+
+        private void ConfigureBooks(ModelBuilder modelBuilder)
+        {
+            var entity = modelBuilder.Entity<Book>();
+
+            entity.HasIndex(b => b.ISBN);
+            entity.HasIndex(b => b.ISBN).IsUnique();
         }
     }
 }

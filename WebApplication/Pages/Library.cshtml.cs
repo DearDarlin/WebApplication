@@ -8,16 +8,18 @@ namespace WebApplication.Pages
 {
     public class LibraryModel : PageModel
     {
-        private readonly IAuthorRepository _authorRepository;
-        private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authors;
+        private readonly IBookRepository _books;
 
-        public LibraryModel(IAuthorRepository authorRepository, IBookRepository bookRepository)
+        public LibraryModel(IAuthorRepository authors, IBookRepository books)
         {
-            _authorRepository = authorRepository;
-            _bookRepository = bookRepository;
+            _authors = authors;
+            _books = books;
         }
-        public List<Author> Authors { get; set; }
-        public List<Book> Books { get; set; }
+
+        public List<Author> Authors { get; set; } = new();
+        public List<Book> Books { get; set; } = new();
+
         [BindProperty(SupportsGet = true)]
         public string SearchTitle { get; set; }
 
@@ -29,40 +31,39 @@ namespace WebApplication.Pages
 
         [BindProperty(SupportsGet = true)]
         public string SortOrder { get; set; }
+
         public SelectList AuthorSelectList { get; set; }
+
         public void OnGet()
         {
-            Authors = _authorRepository.GetAll();
-
+            Authors = _authors.GetAll();
             AuthorSelectList = new SelectList(Authors, "Id", "FullName");
-            var query = _bookRepository.GetAll().AsEnumerable();
 
-            if (!string.IsNullOrEmpty(SearchTitle))
+            var query = _books.GetAll().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(SearchTitle))
             {
-                query = query.Where(b => b.Title.Contains(SearchTitle, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(b =>
+                    b.Title.Contains(SearchTitle, StringComparison.OrdinalIgnoreCase));
             }
+
             if (SearchYear.HasValue)
             {
                 query = query.Where(b => b.PublishYear == SearchYear.Value);
             }
 
-
-            Books = query.ToList();
-            switch (SortOrder)
+            if (SelectedAuthorId.HasValue)
             {
-                case "title_desc":
-                    query = query.OrderByDescending(b => b.Title);
-                    break;
-                case "year_asc":
-                    query = query.OrderBy(b => b.PublishYear);
-                    break;
-                case "year_desc":
-                    query = query.OrderByDescending(b => b.PublishYear);
-                    break;
-                default:
-                    query = query.OrderBy(b => b.Title);
-                    break;
+                query = query.Where(b => b.AuthorId == SelectedAuthorId.Value);
             }
+
+            query = SortOrder switch
+            {
+                "title_desc" => query.OrderByDescending(b => b.Title),
+                "year_asc" => query.OrderBy(b => b.PublishYear),
+                "year_desc" => query.OrderByDescending(b => b.PublishYear),
+                _ => query.OrderBy(b => b.Title)
+            };
 
             Books = query.ToList();
         }
