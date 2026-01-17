@@ -4,7 +4,7 @@
     ViewData["Title"] = "Library";
 }
 <h2 class="mb-4 text-primary">
-    <i class="bi bi-collection"></i> Library Catalog
+    <i class="bi bi-collection"></i> Library
 </h2>
 
 
@@ -67,18 +67,22 @@
                     <label class="form-label">Publish Year</label>
                     <input name="SearchYear"
                            type="number"
+                           min="1450"
+                           max="2026"
+                           step="1"
                            class="form-control"
-                           placeholder="Year..."
+                           placeholder="YYYY"
                            value="@Request.Query["SearchYear"]" />
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Sort by</label>
                     <select asp-for="SortOrder" class="form-select">
-                        <option value="title_asc">Title (A–Z)</option>
-                        <option value="title_desc">Title (Z–A)</option>
-                        <option value="year_asc">Year (Oldest)</option>
-                        <option value="year_desc">Year (Newest)</option>
+                        <option value="year_asc">Old</option>
+                        <option value="year_desc">New</option>
+                        <option value="title_asc">Title A–Z</option>
+                        <option value="title_desc">Title Z–A</option>
+                        
                     </select>
                 </div>
 
@@ -128,9 +132,7 @@
                                 <td>@book.PublishYear</td>
                                 <td>@book.Author.FirstName @book.Author.LastName</td>
                                 <td>
-                                    @(book.Price.HasValue
-                                                                ? $"${book.Price.Value:F2}"
-                                                                : "-")
+                                    @(book.Price.HasValue? $"${book.Price.Value:F2}": "-")
                         </td>
                     </tr>
                                         }
