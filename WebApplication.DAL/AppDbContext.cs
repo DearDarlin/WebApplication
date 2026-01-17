@@ -8,7 +8,7 @@ namespace WebApplication.DAL
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        
+
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
 
@@ -21,8 +21,8 @@ namespace WebApplication.DAL
         {
             var entity = modelBuilder.Entity<Book>();
 
-            entity.HasIndex(b => b.ISBN);
-            entity.HasIndex(b => b.ISBN).IsUnique();
+            entity.HasIndex(b => b.ISBN)
+                  .IsUnique();
         }
     }
 }
