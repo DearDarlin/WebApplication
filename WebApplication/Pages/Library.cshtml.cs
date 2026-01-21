@@ -42,8 +42,6 @@ namespace WebApplication.Pages
             );
         }
 
-
-
         public void OnPostDeleteAuthor(int id)
         {
             string msg;

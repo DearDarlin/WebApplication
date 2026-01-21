@@ -1,0 +1,41 @@
+﻿@page "{id:int}"
+@model WebApplication.Pages.EditAuthorModel
+@{
+}
+
+
+<div class="container">
+    <h2>Редагувати автора</h2>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="alert alert-success">
+            @Model.StatusMessage 
+            <a asp-page="Library" class="alert-link">Повернутися до списку</a>
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" asp-for="Author.Id" />
+
+        <div class="mb-3">
+            <label class="form-label">Ім'я</label>
+            <input asp-for="Author.FirstName" class="form-control" />
+            <span asp-validation-for="Author.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Прізвище</label>
+            <input asp-for="Author.LastName" class="form-control" />
+            <span asp-validation-for="Author.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Дата народження</label>
+            <input asp-for="Author.BirthDate" type="date" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+        <a asp-page="Library" class="btn btn-secondary">Скасувати</a>
+    </form>
+</div>

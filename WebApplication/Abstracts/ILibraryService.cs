@@ -1,5 +1,7 @@
-﻿using WebApplication.DAL.Entities;
+﻿using WebApplication.Models;
+using WebApplication.DAL.Entities;
 using System.Collections.Generic;
+
 
 namespace WebApplication.Abstracts
 {
@@ -16,5 +18,8 @@ namespace WebApplication.Abstracts
         bool DeleteAuthor(int authorId, out string message);
 
         void DeleteBook(int id);
+
+        AuthorDTO GetAuthorById(int id);
+        void UpdateAuthor(AuthorDTO authorDto);
     }
 }

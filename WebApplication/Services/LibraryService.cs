@@ -2,6 +2,7 @@
 using WebApplication.Abstracts;
 using WebApplication.DAL.Abstracts;
 using WebApplication.DAL.Entities;
+using WebApplication.Models;
 
 namespace WebApplication.Services
 {
@@ -90,5 +91,31 @@ namespace WebApplication.Services
             _books.Delete(id);
         }
 
+
+        public AuthorDTO GetAuthorById(int id)
+        {
+            var author = _authors.GetById(id);
+            if (author == null) return null;
+            return new AuthorDTO
+            {
+                Id = author.Id,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                BirthDate = author.BirthDate
+            };
+        }
+
+
+        public void UpdateAuthor(AuthorDTO authorDto)
+        {
+            var author = _authors.GetById(authorDto.Id);
+            if (author != null)
+            {
+                author.FirstName = authorDto.FirstName;
+                author.LastName = authorDto.LastName;
+                author.BirthDate = authorDto.BirthDate;
+                _authors.Update(author);
+            }
+        }
     }
 }

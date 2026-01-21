@@ -32,6 +32,12 @@ namespace WebApplication.DAL.Repositories
             return _context.Authors.Find(id);
         }
 
+        public void Update(Author author)
+        {
+            _context.Authors.Update(author);
+            _context.SaveChanges();
+        }
+
         public bool IsDuplicate(string firstName, string lastName)
         {
             return _context.Authors.Any(a =>
