@@ -28,6 +28,6 @@ namespace WebApplication.DAL.Entities
         public int AuthorId { get; set; }
 
         [ForeignKey("AuthorId")]
-        public Author Author { get; set; }
+        public Author? Author { get; set; }
     }
 }

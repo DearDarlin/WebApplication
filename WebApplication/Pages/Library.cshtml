@@ -28,8 +28,8 @@
                     <th>Name</th>
                     <th>Born</th>
                     <th>Books Count</th>
-                    <th>Edit</th>
                     <th>Delete</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,8 +50,8 @@
                             </form>
                         </td>
                         <td>
-                            <a asp-page="/EditAuthor" asp-route-id="@author.Id" class="btn btn-sm btn-outline-warning">
-                                ✏️ Edit
+                            <a asp-page="/EditAuthor" asp-route-id="@author.Id">
+                                ✏️
                             </a>
                         </td>
                     </tr>
@@ -121,6 +121,7 @@
                             <th>Author</th>
                             <th>Price</th>
                             <th>Delete</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,6 +139,11 @@
                                             🗑️
                                         </button>
                                     </form>
+                                </td>
+                                <td>
+                                    <a asp-page="/EditBook" asp-route-id="@book.Id">
+                                        ✏️
+                                    </a>
                                 </td>
                             </tr>
                         }

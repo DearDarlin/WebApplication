@@ -21,5 +21,7 @@ namespace WebApplication.Abstracts
 
         AuthorDTO GetAuthorById(int id);
         void UpdateAuthor(AuthorDTO authorDto);
+        Book GetBookById(int id);
+        void UpdateBook(Book book);
     }
 }

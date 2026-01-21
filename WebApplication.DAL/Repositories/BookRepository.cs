@@ -35,5 +35,18 @@ namespace WebApplication.DAL.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public Book GetById(int id)
+        {
+            return _context.Books
+                .Include(b => b.Author)
+                .FirstOrDefault(b => b.Id == id);
+        }
+
+        public void Update(Book book)
+        {
+            _context.Books.Update(book);
+            _context.SaveChanges();
+        }
     }
 }

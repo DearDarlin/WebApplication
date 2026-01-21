@@ -117,5 +117,23 @@ namespace WebApplication.Services
                 _authors.Update(author);
             }
         }
+
+        public Book GetBookById(int id)
+        {
+            return _books.GetById(id);
+        }
+
+        public void UpdateBook(Book book)
+        {
+            var thisBook = _books.GetById(book.Id);
+            if (thisBook != null)
+            {
+                thisBook.Title = book.Title;
+                thisBook.PublishYear = book.PublishYear;
+                thisBook.Price = book.Price;
+                thisBook.AuthorId = book.AuthorId;
+                _books.Update(thisBook);
+            }
+        }
     }
 }
