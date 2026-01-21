@@ -3,51 +3,59 @@
 @{
     ViewData["Title"] = "Library";
 }
+
+@if (Model.Message != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <h2 class="mb-4 text-primary">
     <i class="bi bi-collection"></i> Library
 </h2>
 
-
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Authors</h5>
-        </div>
-
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>Born</th>
-                        <th>Books Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var author in Model.Authors)
-                    {
-                        <tr>
-                            <td>
-                                <strong>
-                                    @author.FirstName @author.LastName
-                                </strong>
-                            </td>
-                            <td>@author.BirthDate.ToShortDateString()</td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    @author.Books.Count
-                                </span>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Authors</h5>
     </div>
 
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Born</th>
+                    <th>Books Count</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var author in Model.Model.Authors)
+                {
+                    <tr>
+                        <td>
+                            <strong>@author.FirstName @author.LastName</strong>
+                        </td>
+                        <td>@author.BirthDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-secondary">@author.Books.Count</span>
+                        </td>
+                        <td>
+                            <form method="post" asp-page-handler="DeleteAuthor">
+                                <input type="hidden" name="id" value="@author.Id" />
+                                <button type="submit">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="container py-4">
-
-    
-
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-light">
             <strong>Search & Filters</strong>
@@ -55,43 +63,31 @@
 
         <div class="card-body">
             <form method="get" class="row g-2 align-items-end">
-
                 <div class="col-md-3">
                     <label class="form-label">Title</label>
-                    <input asp-for="SearchTitle"
-                           class="form-control"
-                           placeholder="Search title..." />
+                    <input asp-for="Model.SearchTitle" class="form-control" placeholder="Search title..." />
                 </div>
 
                 <div class="col-md-2">
                     <label class="form-label">Publish Year</label>
-                    <input name="SearchYear"
-                           type="number"
-                           min="1450"
-                           max="2026"
-                           step="1"
-                           class="form-control"
-                           placeholder="YYYY"
-                           value="@Request.Query["SearchYear"]" />
+                    <input asp-for="Model.SearchYear" type="number" class="form-control" placeholder="YYYY" />
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Sort by</label>
-                    <select asp-for="SortOrder" class="form-select">
+                    <select asp-for="Model.SortOrder" class="form-select">
                         <option value="year_asc">Old</option>
                         <option value="year_desc">New</option>
                         <option value="title_asc">Title A–Z</option>
                         <option value="title_desc">Title Z–A</option>
-                        
                     </select>
                 </div>
 
                 <div class="col-md-3 d-grid">
                     <button type="submit" class="btn btn-success">
-                        <i class="bi bi-funnel"></i> Submit
+                        <i class="bi bi-funnel"></i> Filter
                     </button>
                 </div>
-
             </form>
         </div>
     </div>
@@ -102,12 +98,10 @@
         </div>
 
         <div class="card-body p-0">
-
-            @if (Model.Books.Count == 0)
+            @if (Model.Model.Books == null || Model.Model.Books.Count == 0)
             {
                 <div class="p-4 text-center text-muted">
-                    <i class="bi bi-emoji-frown"></i>
-                    No books found with selected filters.
+                    <i class="bi bi-emoji-frown"></i> No books found.
                 </div>
             }
             else
@@ -120,27 +114,30 @@
                             <th>Year</th>
                             <th>Author</th>
                             <th>Price</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @foreach (var book in Model.Books)
+                        @foreach (var book in Model.Model.Books)
                         {
                             <tr>
                                 <td><strong>@book.Title</strong></td>
                                 <td>@book.ISBN</td>
                                 <td>@book.PublishYear</td>
-                                <td>@book.Author.FirstName @book.Author.LastName</td>
+                                <td>@book.Author?.FirstName @book.Author?.LastName</td>
+                                <td>@(book.Price.HasValue ? $"${book.Price.Value:F2}" : "-")</td>
                                 <td>
-                                    @(book.Price.HasValue? $"${book.Price.Value:F2}": "-")
-                        </td>
-                    </tr>
-                                        }
+                                    <form method="post" asp-page-handler="DeleteBook" asp-route-id="@book.Id">
+                                        <button type="submit">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             }
-
         </div>
     </div>
-
 </div>

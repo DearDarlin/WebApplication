@@ -1,19 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebApplication.DAL.Abstracts;
+using WebApplication.Abstracts;
 using WebApplication.DAL.Entities;
 
 namespace WebApplication.Pages
 {
     public class AddModel : PageModel
     {
-        private readonly IAuthorRepository _authors;
-        private readonly IBookRepository _books;
+        private readonly ILibraryService _libraryService;
 
-        public AddModel(IAuthorRepository authors, IBookRepository books)
+        public AddModel(ILibraryService libraryService)
         {
-            _authors = authors;
-            _books = books;
+            _libraryService = libraryService;
         }
 
         [BindProperty]
@@ -21,37 +19,36 @@ namespace WebApplication.Pages
 
         [BindProperty]
         public Book NewBook { get; set; }
-        public IList<Author> AuthorsList { get; private set; }
 
+        public IList<Author> AuthorsList { get; set; }
 
-        [TempData]
         public string Message { get; set; }
 
         public void OnGet()
         {
-            AuthorsList = _authors.GetAll();
+            AuthorsList = _libraryService.GetAllAuthors();
         }
 
-        public IActionResult OnPostAddAuthor()
+        public void OnPostAddAuthor()
         {
-            bool exists = _authors.IsDuplicate(NewAuthor.FirstName, NewAuthor.LastName);
+            bool success = _libraryService.AddAuthor(NewAuthor);
 
-            if (exists)
+            if (!success)
             {
-                ModelState.AddModelError("Error", "There is such an author in the library! Please, no repetitions!");
-                AuthorsList = _authors.GetAll();
-                return Page();
+                Message = "There is such an author in the library!";
+                this.OnGet();
+                return;
             }
-            _authors.Add(NewAuthor);
-            Message = $"Author {NewAuthor.FirstName} {NewAuthor.LastName} added successfully!";
-            return RedirectToPage();
+
+            Message = $"Author {NewAuthor.FirstName} {NewAuthor.LastName} added!";
+            this.OnGet();
         }
 
-        public IActionResult OnPostAddBook()
+        public void OnPostAddBook()
         {
-            _books.Add(NewBook);
-            Message = $"Book '{NewBook.Title}' added successfully!";
-            return RedirectToPage();
+            _libraryService.AddBook(NewBook);
+            Message = $"Book '{NewBook.Title}' added!";
+            this.OnGet();
         }
     }
 }

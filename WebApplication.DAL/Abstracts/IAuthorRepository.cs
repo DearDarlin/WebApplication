@@ -7,6 +7,8 @@ namespace WebApplication.DAL.Abstracts
         List<Author> GetAll();
         void Add(Author author);
         Author GetById(int id);
+
+        void Delete(int id);
         bool IsDuplicate(string firstName, string lastName);
     }
 }

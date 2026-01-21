@@ -6,5 +6,7 @@ namespace WebApplication.DAL.Abstracts
     {
         List<Book> GetAll();
         void Add(Book book);
+
+        void Delete(int id);
     }
 }

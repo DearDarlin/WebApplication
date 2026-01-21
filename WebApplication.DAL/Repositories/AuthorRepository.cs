@@ -18,6 +18,7 @@ namespace WebApplication.DAL.Repositories
             _context.Authors.Add(author);
             _context.SaveChanges();
         }
+
         public List<Author> GetAll()
         {
             return _context.Authors
@@ -30,11 +31,22 @@ namespace WebApplication.DAL.Repositories
         {
             return _context.Authors.Find(id);
         }
+
         public bool IsDuplicate(string firstName, string lastName)
         {
             return _context.Authors.Any(a =>
                 a.FirstName == firstName &&
                 a.LastName == lastName);
+        }
+
+        public void Delete(int id)
+        {
+            var author = _context.Authors.Find(id);
+            if (author != null)
+            {
+                _context.Authors.Remove(author);
+                _context.SaveChanges();
+            }
         }
     }
 }

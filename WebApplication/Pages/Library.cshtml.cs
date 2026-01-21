@@ -1,72 +1,66 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApplication.DAL.Abstracts;
-using WebApplication.DAL.Entities;
+using WebApplication.Abstracts;
+using WebApplication.Models;
 
 namespace WebApplication.Pages
 {
     public class LibraryModel : PageModel
     {
-        private readonly IAuthorRepository _authors;
-        private readonly IBookRepository _books;
+        private readonly ILibraryService _libraryService;
 
-        public LibraryModel(IAuthorRepository authors, IBookRepository books)
-        {
-            _authors = authors;
-            _books = books;
-        }
+        public string Message { get; set; }
 
-        public List<Author> Authors { get; set; } = new();
-        public List<Book> Books { get; set; } = new();
-
-        [BindProperty(SupportsGet = true)]
-        public string SearchTitle { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public int? SearchYear { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public int? SelectedAuthorId { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public string SortOrder { get; set; }
+        [BindProperty]
+        public LibraryDTO Model { get; set; }
 
         public SelectList AuthorSelectList { get; set; }
 
+        public LibraryModel(ILibraryService libraryService)
+        {
+            _libraryService = libraryService;
+        }
+
         public void OnGet()
         {
-            Authors = _authors.GetAll();
-            AuthorSelectList = new SelectList(Authors, "Id", "FullName");
-
-            var query = _books.GetAll().AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(SearchTitle))
+            if (Model == null)
             {
-                query = query.Where(b =>
-                    b.Title.Contains(SearchTitle, StringComparison.OrdinalIgnoreCase));
+                Model = new LibraryDTO();
             }
 
-            if (SearchYear.HasValue)
-            {
-                query = query.Where(b => b.PublishYear == SearchYear.Value);
-            }
+            var authors = _libraryService.GetAllAuthors().ToList();
+            Model.Authors = authors;
 
-            if (SelectedAuthorId.HasValue)
-            {
-                query = query.Where(b => b.AuthorId == SelectedAuthorId.Value);
-            }
+            AuthorSelectList = new SelectList(authors, "Id", "FullName");
 
-            query = SortOrder switch
-            {
-                "title_desc" => query.OrderByDescending(b => b.Title),
-                "year_asc" => query.OrderBy(b => b.PublishYear),
-                "year_desc" => query.OrderByDescending(b => b.PublishYear),
-                _ => query.OrderBy(b => b.Title)
-            };
+            Model.Books = _libraryService.GetFilteredBooks(
+                Model.SearchTitle,
+                Model.SearchYear,
+                Model.SelectedAuthorId,
+                Model.SortOrder
+            );
+        }
 
-            Books = query.ToList();
+
+
+        public void OnPostDeleteAuthor(int id)
+        {
+            string msg;
+            _libraryService.DeleteAuthor(id, out msg);
+
+            Message = msg;
+
+            OnGet();
+        }
+
+        public void OnPostDeleteBook(int id)
+        {
+            _libraryService.DeleteBook(id);
+
+            Message = "Book successfully deleted!";
+
+            OnGet();
         }
     }
 }
-
