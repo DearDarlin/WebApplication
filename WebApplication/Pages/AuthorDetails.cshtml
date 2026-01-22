@@ -1,0 +1,44 @@
+﻿@page "{id:int}"
+@model WebApplication.Pages.AuthorDetailsModel
+@{
+}
+<div class="container mt-4">
+        <h2>@Model.Author.FirstName @Model.Author.LastName</h2>
+        <p> @Model.Author.BirthDate.ToLongDateString()</p>
+
+    <h3>Список книг</h3>
+    <hr />
+
+    @if (Model.AuthorBooks != null && Model.AuthorBooks.Any())
+    {
+        <table class="table table-hover mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Назва книги</th>
+                    <th>Рік видання</th>
+                    <th>Ціна</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.AuthorBooks)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.PublishYear</td>
+                        <td>$@book.Price?.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info shadow-sm" role="alert">
+            <strong>No books for this author</strong>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-page="/Library" class="btn btn-secondary">Back</a>
+    </div>
+</div>

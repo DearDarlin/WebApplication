@@ -28,6 +28,7 @@
                     <th>Name</th>
                     <th>Born</th>
                     <th>Books Count</th>
+                    <th>Details</th>
                     <th>Delete</th>
                     <th>Edit</th>
                 </tr>
@@ -40,8 +41,14 @@
                             <strong>@author.FirstName @author.LastName</strong>
                         </td>
                         <td>@author.BirthDate.ToShortDateString()</td>
+                        
                         <td>
                             <span class="badge bg-secondary">@author.Books.Count</span>
+                        </td>
+                        <td>
+                            <a asp-page="/AuthorDetails" asp-route-id="@author.Id" title="View Details" class="text-decoration-none">
+                                👁️
+                            </a>
                         </td>
                         <td>
                             <form method="post" asp-page-handler="DeleteAuthor">
@@ -50,7 +57,7 @@
                             </form>
                         </td>
                         <td>
-                            <a asp-page="/EditAuthor" asp-route-id="@author.Id">
+                            <a asp-page="/EditAuthor" asp-route-id="@author.Id" class="text-decoration-none">
                                 ✏️
                             </a>
                         </td>
@@ -141,7 +148,7 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <a asp-page="/EditBook" asp-route-id="@book.Id">
+                                    <a asp-page="/EditBook" asp-route-id="@book.Id" class="text-decoration-none">
                                         ✏️
                                     </a>
                                 </td>
