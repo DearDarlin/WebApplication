@@ -138,7 +138,11 @@
                                 <td><strong>@book.Title</strong></td>
                                 <td>@book.ISBN</td>
                                 <td>@book.PublishYear</td>
-                                <td>@book.Author?.FirstName @book.Author?.LastName</td>
+                                <td>
+                                    <a asp-page="/AuthorDetails" asp-route-id="@book.AuthorId">
+										@book.Author?.FirstName @book.Author?.LastName
+                                    </a>
+                                </td>
                                 <td>@(book.Price.HasValue ? $"${book.Price.Value:F2}" : "-")</td>
                                 <td>
                                     <form method="post" asp-page-handler="DeleteBook" asp-route-id="@book.Id">

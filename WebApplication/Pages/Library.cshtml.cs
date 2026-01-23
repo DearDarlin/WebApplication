@@ -12,7 +12,7 @@ namespace WebApplication.Pages
 
         public string Message { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public LibraryDTO Model { get; set; }
 
         public SelectList AuthorSelectList { get; set; }
@@ -45,19 +45,21 @@ namespace WebApplication.Pages
         public void OnPostDeleteAuthor(int id)
         {
             string msg;
+            // Видалення автора з бази з перевіркою на наявність книг
             _libraryService.DeleteAuthor(id, out msg);
-
+            // Відображення повідомлення про результат видалення
             Message = msg;
-
+            // Оновлення списку авторів та книг
             OnGet();
         }
 
         public void OnPostDeleteBook(int id)
         {
+            //Видалення книги з бази
             _libraryService.DeleteBook(id);
 
             Message = "Book successfully deleted!";
-
+            // Оновлення списку книг
             OnGet();
         }
     }

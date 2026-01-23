@@ -8,17 +8,21 @@ namespace WebApplication.Services
 {
     public class LibraryService : ILibraryService
     {
+        // Репозиторії для доступу до таблиць авторів та книг
         private readonly IAuthorRepository _authors;
         private readonly IBookRepository _books;
 
+        // Конструктор з впровадженням залежностей
         public LibraryService(IAuthorRepository authors, IBookRepository books)
         {
             _authors = authors;
             _books = books;
         }
 
+        // Отримання всіх авторів з бази даних
         public IList<Author> GetAllAuthors() => _authors.GetAll();
 
+        // Додавання нового автора, перевірка на дублікати
         public bool AddAuthor(Author author)
         {
             if (_authors.IsDuplicate(author.FirstName, author.LastName))
@@ -30,18 +34,21 @@ namespace WebApplication.Services
             return true;
         }
 
+        // Додавання нової книги
         public void AddBook(Book book)
         {
             _books.Add(book);
         }
 
+        // Метод для пошуку та фільтрації книг за різними критеріями
         public List<Book> GetFilteredBooks(string title, int? year, int? authorId, string sortOrder)
         {
-            var query = _books.GetAll().AsQueryable();
+            var query = _books.GetAll(); ;
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                query = query.Where(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+                // Прибираємо StringComparison для сумісності з EF
+                query = query.Where(b => b.Title.Contains(title));
             }
 
             if (year.HasValue)
@@ -56,6 +63,7 @@ namespace WebApplication.Services
 
             query = sortOrder switch
             {
+                "title_asc" => query.OrderBy(b => b.Title),
                 "title_desc" => query.OrderByDescending(b => b.Title),
                 "year_asc" => query.OrderBy(b => b.PublishYear),
                 "year_desc" => query.OrderByDescending(b => b.PublishYear),
@@ -65,12 +73,14 @@ namespace WebApplication.Services
             return query.ToList();
         }
 
+        // Видалення автора за ідентифікатором з перевіркою на наявність книг
         public bool DeleteAuthor(int authorId, out string message)
         {
+            // Перевірка, чи існує автор з вказаним ідентифікатором
             var author = _authors.GetAll()
                                  .FirstOrDefault(a => a.Id == authorId);
 
-
+            // Перевіряємо чи у автора є книги
             var hasBooks = _books.GetAll()
                                  .Any(b => b.AuthorId == authorId);
 
@@ -86,12 +96,13 @@ namespace WebApplication.Services
             return true;
         }
 
+        // Видалення книги за ідентифікатором
         public void DeleteBook(int id)
         {
             _books.Delete(id);
         }
 
-
+        // Отримання автора за ідентифікатором та перетворення в DTO
         public AuthorDTO GetAuthorById(int id)
         {
             var author = _authors.GetById(id);
@@ -105,7 +116,7 @@ namespace WebApplication.Services
             };
         }
 
-
+        // Оновлення інформації про автора
         public void UpdateAuthor(AuthorDTO authorDto)
         {
             var author = _authors.GetById(authorDto.Id);
@@ -118,20 +129,25 @@ namespace WebApplication.Services
             }
         }
 
+        // Отримання книги за ідентифікатором
         public Book GetBookById(int id)
         {
             return _books.GetById(id);
         }
 
+        // Оновлення інформації про книгу
         public void UpdateBook(Book book)
         {
+            // Отримання існуючої книги з репозиторію
             var thisBook = _books.GetById(book.Id);
             if (thisBook != null)
             {
+                // Оновлення полів книги
                 thisBook.Title = book.Title;
                 thisBook.PublishYear = book.PublishYear;
                 thisBook.Price = book.Price;
                 thisBook.AuthorId = book.AuthorId;
+                // Збереження оновлень у репозиторії
                 _books.Update(thisBook);
             }
         }
