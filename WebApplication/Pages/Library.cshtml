@@ -51,7 +51,7 @@
                             </a>
                         </td>
                         <td>
-                            <form method="post" asp-page-handler="DeleteAuthor">
+                            <form method="post" asp-page-handler="DeleteAuthor" asp-route-id="@author.Id">
                                 <input type="hidden" name="id" value="@author.Id" />
                                 <button type="submit">🗑️</button>
                             </form>
