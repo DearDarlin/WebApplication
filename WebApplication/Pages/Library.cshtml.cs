@@ -13,6 +13,7 @@ namespace WebApplication.Pages
         public string Message { get; set; }
 
         //SupportsGet = true дозволяє автоматично заповнювати поля моделі з параметрів запиту GET
+        //Дозволяє фільтрам зберігатись у URL
         [BindProperty(SupportsGet = true)]
         public LibraryDTO Model { get; set; }
 
@@ -43,6 +44,26 @@ namespace WebApplication.Pages
                 Model.SelectedAuthorId,
                 Model.SortOrder
             );
+        }
+
+        public void OnGetSearch()
+        {
+            // Фільтри вже заповнені завдяки [BindProperty(SupportsGet = true)]
+            OnGet();
+        }
+
+        public void OnGetReset()
+        {
+            // Скидаємо фільтри
+            Model.SearchTitle = null;
+            Model.SearchYear = null;
+            Model.SelectedAuthorId = null;
+            Model.SortOrder = null;
+            //Очищаємо стан моделі (щоб старі значення не залишилися в input-полях)
+            ModelState.Clear();
+            // Оновлення списку авторів та книг
+            OnGet();
+
         }
 
         public void OnPostDeleteAuthor(int id)

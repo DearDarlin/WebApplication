@@ -96,17 +96,28 @@
                     </select>
                 </div>
 
-                <div class="col-md-3 d-grid">
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-funnel"></i> Filter
-                    </button>
-                </div>
+                <form method="get" class="row g-2 align-items-end">
+               
+                    <div class="col-md-3 d-grid gap-2 d-md-flex">
+                        <button type="submit"
+                                asp-page-handler="Search"
+                                class="btn btn-success">
+                            Search
+                        </button>
+
+                        <button type="submit"
+                                asp-page-handler="Reset"
+                                class="btn btn-secondary">
+                            Reset filters
+                        </button>
+                    </div>
+                </form>
             </form>
         </div>
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">
+        <div class="card-header bg-pink text-white">
             <h5 class="mb-0">Books</h5>
         </div>
 
