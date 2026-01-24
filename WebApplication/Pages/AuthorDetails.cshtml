@@ -1,10 +1,20 @@
 ﻿@page "{id:int}"
 @model WebApplication.Pages.AuthorDetailsModel
 @{
+    ViewData["Title"] = "Деталі автора";
 }
+
 <div class="container mt-4">
-        <h2>@Model.Author.FirstName @Model.Author.LastName</h2>
-        <p> @Model.Author.BirthDate.ToLongDateString()</p>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Інформація про автора</h2>
+            <a asp-page="/Library" class="btn btn-light btn-sm">Back to Library</a>
+        </div>
+        <div class="card-body">
+            <h4>@Model.Author.FirstName @Model.Author.LastName</h4>
+            <p><strong>Дата народження:</strong> @Model.Author.BirthDate.ToLongDateString()</p>
+        </div>
+    </div>
 
     <h3>Список книг</h3>
     <hr />
@@ -17,6 +27,7 @@
                     <th>Назва книги</th>
                     <th>Рік видання</th>
                     <th>Ціна</th>
+                    <th>Дії</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +37,11 @@
                         <td>@book.Title</td>
                         <td>@book.PublishYear</td>
                         <td>$@book.Price?.ToString("F2")</td>
+                        <td>
+                            <a asp-page="/EditBook" asp-route-id="@book.Id" class="btn btn-sm btn-warning">
+                                Edit Book
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -34,11 +50,7 @@
     else
     {
         <div class="alert alert-info shadow-sm" role="alert">
-            <strong>No books for this author</strong>
+            <strong>У цього автора поки немає книг.</strong>
         </div>
     }
-
-    <div class="mt-4">
-        <a asp-page="/Library" class="btn btn-secondary">Back</a>
-    </div>
 </div>

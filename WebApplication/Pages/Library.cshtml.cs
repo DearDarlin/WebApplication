@@ -12,6 +12,7 @@ namespace WebApplication.Pages
 
         public string Message { get; set; }
 
+        //SupportsGet = true дозволяє автоматично заповнювати поля моделі з параметрів запиту GET
         [BindProperty(SupportsGet = true)]
         public LibraryDTO Model { get; set; }
 
@@ -22,8 +23,10 @@ namespace WebApplication.Pages
             _libraryService = libraryService;
         }
 
+        // Метод спрацьовує при завантаженні сторінки або при натисканні кнопки пошуку
         public void OnGet()
         {
+            //
             if (Model == null)
             {
                 Model = new LibraryDTO();

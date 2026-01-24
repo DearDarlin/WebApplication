@@ -18,7 +18,10 @@ namespace WebApplication.Pages
         // Додаємо властивість для сповіщення
         public string StatusMessage { get; set; }
 
-        public EditBookModel(ILibraryService service) => _service = service;
+        public EditBookModel(ILibraryService service)
+        {
+            _service = service;
+        }
 
         public void OnGet(int id)
         {

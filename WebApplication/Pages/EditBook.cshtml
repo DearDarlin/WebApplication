@@ -1,19 +1,28 @@
-﻿@page "{id:int}"
+﻿@page "/Books/Edit/{id:int}"
 @model WebApplication.Pages.EditBookModel
 @{
 }
 
 
 <div class="container mt-4">
-    <h2>Edit Book</h2>
-
-    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    @if (Model.Book == null)
     {
-        <div class="alert alert-success">
-            @Model.StatusMessage <a asp-page="Library">Back to list</a>
+        <div>
+            <h3>NotFound</h3>
+            <a asp-page="Library">Back to Library</a>
         </div>
     }
+    else
+    {
+        <h2>Edit Book</h2>
 
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success">
+                @Model.StatusMessage <a asp-page="Library">Back to list</a>
+            </div>
+        }
+    
     <form method="post" class="card p-4 shadow-sm">
         <input type="hidden" asp-for="Book.Id" />
 
@@ -51,4 +60,5 @@
             <a asp-page="Library" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
+    }
 </div>
