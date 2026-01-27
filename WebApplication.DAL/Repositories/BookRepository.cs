@@ -19,10 +19,8 @@ namespace WebApplication.DAL.Repositories
             _context.SaveChanges();
         }
 
-        // В інтерфейсі IBookRepository зміни тип повернення на IQueryable<Book>
         public IQueryable<Book> GetAll()
         {
-            // МИ НЕ ПИШЕМО .ToList() ТУТ
             return _context.Books.Include(b => b.Author);
         }
 
