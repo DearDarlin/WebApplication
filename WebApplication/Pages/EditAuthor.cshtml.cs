@@ -25,7 +25,7 @@ namespace WebApplication.Pages
             Author = _libraryService.GetAuthorById(id);
         }
 
-        // Зберігаємо зміни
+        // Збереження змінених даних автора після перевірки валідації
         public void OnPost()
         {
             if (ModelState.IsValid)

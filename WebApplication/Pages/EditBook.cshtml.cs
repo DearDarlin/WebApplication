@@ -47,7 +47,7 @@ namespace WebApplication.Pages
                 StatusMessage = "Changes saved successfully!"; // Повідомляємо про успіх
             }
 
-            // Обов'язково перезавантажуємо список авторів, щоб dropdown не став порожнім
+            // перезавантажуємо список авторів, щоб dropdown не став порожнім
             LoadAuthors();
         }
 

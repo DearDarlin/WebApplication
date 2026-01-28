@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplication.Abstracts;
+﻿using WebApplication.Abstracts;
 using WebApplication.DAL.Abstracts;
 using WebApplication.DAL.Entities;
 using WebApplication.Models;
@@ -20,7 +19,10 @@ namespace WebApplication.Services
         }
 
         // Отримання всіх авторів з бази даних
-        public IList<Author> GetAllAuthors() => _authors.GetAll();
+        public IList<Author> GetAllAuthors()
+        {
+            return _authors.GetAll();
+        }
 
         // Додавання нового автора, перевірка на дублікати
         public bool AddAuthor(Author author)
@@ -48,7 +50,7 @@ namespace WebApplication.Services
         // Метод для пошуку та фільтрації книг за різними критеріями
         public List<Book> GetFilteredBooks(string title, int? year, int? authorId, string sortOrder)
         {
-            var query = _books.GetAll(); ;
+            var query = _books.GetAll(); 
 
             if (!string.IsNullOrWhiteSpace(title))
             {
@@ -92,6 +94,12 @@ namespace WebApplication.Services
             if (hasBooks)
             {
                 message = "You cannot delete this author because there are books associated with him";
+                return false;
+            }
+
+            if (author == null)
+            {
+                message = "Author not found";
                 return false;
             }
 

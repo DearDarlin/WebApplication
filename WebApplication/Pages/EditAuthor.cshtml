@@ -5,13 +5,13 @@
 
 
 <div class="container">
-    <h2>Редагувати автора</h2>
+    <h2>Edit author</h2>
 
     @if (!string.IsNullOrEmpty(Model.StatusMessage))
     {
         <div class="alert alert-success">
-            @Model.StatusMessage 
-            <a asp-page="Library" class="alert-link">Повернутися до списку</a>
+            @Model.StatusMessage
+            <a asp-page="Library" class="alert-link">Return to list</a>
         </div>
     }
 
@@ -19,23 +19,23 @@
         <input type="hidden" asp-for="Author.Id" />
 
         <div class="mb-3">
-            <label class="form-label">Ім'я</label>
+            <label class="form-label">Name</label>
             <input asp-for="Author.FirstName" class="form-control" />
             <span asp-validation-for="Author.FirstName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Прізвище</label>
+            <label class="form-label">Surname</label>
             <input asp-for="Author.LastName" class="form-control" />
             <span asp-validation-for="Author.LastName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Дата народження</label>
+            <label class="form-label">Date of birth</label>
             <input asp-for="Author.BirthDate" type="date" class="form-control" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
-        <a asp-page="Library" class="btn btn-secondary">Скасувати</a>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <a asp-page="Library" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
