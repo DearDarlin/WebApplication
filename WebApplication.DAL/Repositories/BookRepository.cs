@@ -6,52 +6,50 @@ namespace WebApplication.DAL.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
-        public BookRepository(AppDbContext context)
+        public BookRepository(AppDbContext db)
         {
-            _context = context;
+            _db = db;
         }
 
         public void Add(Book book)
         {
-            _context.Books.Add(book);
-            _context.SaveChanges();
+            _db.Books.Add(book);
+            _db.SaveChanges();
         }
 
         public IQueryable<Book> GetAll()
         {
-            return _context.Books.Include(b => b.Author);
+            return _db.Books.Include(b => b.Author);
         }
 
         public void Delete(int id)
         {
-            var book = _context.Books.Find(id);
+            var book = _db.Books.Find(id);
             if (book != null)
             {
-                _context.Books.Remove(book);
-                _context.SaveChanges();
+                _db.Books.Remove(book);
+                _db.SaveChanges();
             }
         }
 
         public bool IsDuplicate(string title, int authorId)
         {
-            return _context.Books.Any(b =>
+            return _db.Books.Any(b =>
             b.Title == title && b.AuthorId == authorId);
 
         }
 
         public Book GetById(int id)
         {
-            return _context.Books
-                .Include(b => b.Author)
-                .FirstOrDefault(b => b.Id == id);
+            return _db.Books.Include(b => b.Author).FirstOrDefault(b => b.Id == id);
         }
 
         public void Update(Book book)
         {
-            _context.Books.Update(book);
-            _context.SaveChanges();
+            _db.Books.Update(book);
+            _db.SaveChanges();
         }
     }
 }
