@@ -34,6 +34,13 @@ namespace WebApplication.DAL.Repositories
             }
         }
 
+        public bool IsDuplicate(string title, int authorId)
+        {
+            return _context.Books.Any(b =>
+            b.Title == title && b.AuthorId == authorId);
+
+        }
+
         public Book GetById(int id)
         {
             return _context.Books

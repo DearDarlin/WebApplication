@@ -31,7 +31,7 @@ namespace WebApplication.Pages
             if (ModelState.IsValid)
             {
                 _libraryService.UpdateAuthor(Author);
-                StatusMessage = "Дані автора успішно оновлено!";
+                StatusMessage = "Author data successfully updated!";
             }
         }
     }

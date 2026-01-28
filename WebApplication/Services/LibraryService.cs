@@ -34,10 +34,15 @@ namespace WebApplication.Services
             return true;
         }
 
-        // Додавання нової книги
-        public void AddBook(Book book)
+        // Додавання нової книги, перевірка на дублікати
+        public bool AddBook(Book book)
         {
+            if (_books.IsDuplicate(book.Title, book.AuthorId))
+            {
+                return false;
+            }
             _books.Add(book);
+            return true;
         }
 
         // Метод для пошуку та фільтрації книг за різними критеріями

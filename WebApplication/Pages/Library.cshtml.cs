@@ -15,7 +15,7 @@ namespace WebApplication.Pages
         //SupportsGet = true дозволяє автоматично заповнювати поля моделі з параметрів запиту GET
         //Дозволяє фільтрам зберігатись у URL
         [BindProperty(SupportsGet = true)]
-        public LibraryDTO Model { get; set; }
+        public LibraryDTO Library { get; set; }
 
         public SelectList AuthorSelectList { get; set; }
 
@@ -28,37 +28,31 @@ namespace WebApplication.Pages
         public void OnGet()
         {
             //
-            if (Model == null)
+            if (Library == null)
             {
-                Model = new LibraryDTO();
+                Library = new LibraryDTO();
             }
 
             var authors = _libraryService.GetAllAuthors().ToList();
-            Model.Authors = authors;
+            Library.Authors = authors;
 
             AuthorSelectList = new SelectList(authors, "Id", "FullName");
 
-            Model.Books = _libraryService.GetFilteredBooks(
-                Model.SearchTitle,
-                Model.SearchYear,
-                Model.SelectedAuthorId,
-                Model.SortOrder
+            Library.Books = _libraryService.GetFilteredBooks(
+                Library.SearchTitle,
+                Library.SearchYear,
+                Library.SelectedAuthorId,
+                Library.SortOrder
             );
-        }
-
-        public void OnGetSearch()
-        {
-            // Фільтри вже заповнені завдяки [BindProperty(SupportsGet = true)]
-            OnGet();
         }
 
         public void OnGetReset()
         {
             // Скидаємо фільтри
-            Model.SearchTitle = null;
-            Model.SearchYear = null;
-            Model.SelectedAuthorId = null;
-            Model.SortOrder = null;
+            Library.SearchTitle = null;
+            Library.SearchYear = null;
+            Library.SelectedAuthorId = null;
+            Library.SortOrder = null;
             //Очищаємо стан моделі (щоб старі значення не залишилися в input-полях)
             ModelState.Clear();
             // Оновлення списку авторів та книг

@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var author in Model.Model.Authors)
+                @foreach (var author in Model.Library.Authors)
                 {
                     <tr>
                         <td>
@@ -78,17 +78,17 @@
             <form method="get" class="row g-2 align-items-end">
                 <div class="col-md-3">
                     <label class="form-label">Title</label>
-                    <input asp-for="Model.SearchTitle" class="form-control" placeholder="Search title..." />
+                    <input asp-for="Library.SearchTitle" class="form-control" placeholder="Search title..." />
                 </div>
 
                 <div class="col-md-2">
                     <label class="form-label">Publish Year</label>
-                    <input asp-for="Model.SearchYear" type="number" class="form-control" placeholder="YYYY" />
+                    <input asp-for="Library.SearchYear" type="number" class="form-control" placeholder="YYYY" />
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Sort by</label>
-                    <select asp-for="Model.SortOrder" class="form-select">
+                    <select asp-for="Library.SortOrder" class="form-select">
                         <option value="year_asc">Old</option>
                         <option value="year_desc">New</option>
                         <option value="title_asc">Title A–Z</option>
@@ -122,7 +122,7 @@
         </div>
 
         <div class="card-body p-0">
-            @if (Model.Model.Books == null || Model.Model.Books.Count == 0)
+            @if (Model.Library.Books == null || Model.Library.Books.Count == 0)
             {
                 <div class="p-4 text-center text-muted">
                     <i class="bi bi-emoji-frown"></i> No books found.
@@ -143,7 +143,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var book in Model.Model.Books)
+                        @foreach (var book in Model.Library.Books)
                         {
                             <tr>
                                 <td><strong>@book.Title</strong></td>

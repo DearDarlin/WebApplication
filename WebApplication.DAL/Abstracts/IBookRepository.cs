@@ -10,5 +10,7 @@ namespace WebApplication.DAL.Abstracts
         void Delete(int id);
         Book GetById(int id);
         void Update(Book book);
+
+        bool IsDuplicate(string title, int authorId);
     }
 }

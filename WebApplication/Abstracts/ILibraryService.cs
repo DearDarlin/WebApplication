@@ -12,7 +12,7 @@ namespace WebApplication.Abstracts
         bool AddAuthor(Author author);
 
         // Методи для книг
-        void AddBook(Book book);
+        bool AddBook(Book book);
         List<Book> GetFilteredBooks(string title, int? year, int? authorId, string sortOrder);
 
         bool DeleteAuthor(int authorId, out string message);

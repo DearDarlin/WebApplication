@@ -31,24 +31,32 @@ namespace WebApplication.Pages
 
         public void OnPostAddAuthor()
         {
-            bool success = _libraryService.AddAuthor(NewAuthor);
+            bool success_author = _libraryService.AddAuthor(NewAuthor);
 
-            if (!success)
+            if (!success_author)
             {
                 Message = "There is such an author in the library!";
-                this.OnGet();
+                OnGet();
                 return;
             }
 
-            Message = $"Author {NewAuthor.FirstName} {NewAuthor.LastName} added!";
-            this.OnGet();
+            Message = $"Author {NewAuthor.FullName} added!";
+            OnGet();
         }
 
         public void OnPostAddBook()
         {
-            _libraryService.AddBook(NewBook);
+            bool success_book = _libraryService.AddBook(NewBook); 
+
+            if (!success_book)
+            {
+                Message = "There is such a book in the library!";
+                OnGet();
+                return;
+            }
+            
             Message = $"Book '{NewBook.Title}' added!";
-            this.OnGet();
+            OnGet();
         }
     }
 }

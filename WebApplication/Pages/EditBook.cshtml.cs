@@ -32,17 +32,19 @@ namespace WebApplication.Pages
         public void OnPost()
         {
             ModelState.Remove("Book.Author");
+
             // Перевірка обмеження року
             int currentYear = DateTime.Now.Year;
+
             if (Book.PublishYear < 1450 || Book.PublishYear > currentYear)
             {
-                ModelState.AddModelError("Book.PublishYear", $"Рік має бути від 1450 до {currentYear}");
+                ModelState.AddModelError("Book.PublishYear", $"The year must be between 1450 and {currentYear}");
             }
 
             if (ModelState.IsValid)
             {
                 _service.UpdateBook(Book);
-                StatusMessage = "Зміни успішно збережено!"; // Повідомляємо про успіх
+                StatusMessage = "Changes saved successfully!"; // Повідомляємо про успіх
             }
 
             // Обов'язково перезавантажуємо список авторів, щоб dropdown не став порожнім
@@ -52,7 +54,7 @@ namespace WebApplication.Pages
         private void LoadAuthors()
         {
             var authors = _service.GetAllAuthors();
-            // Використовуємо FullName з твого LibraryDTO
+
             AuthorSelectList = new SelectList(authors, "Id", "FullName");
         }
     }
